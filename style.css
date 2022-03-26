@@ -64,7 +64,8 @@ h2{
     border-radius: 8px;
 }
 
-.todo_submit_button{
+.todo_submit_button,
+.todo_sel_delete_button{
     background-color: #939597;
     color:#fff;
     width: 80px;
@@ -118,28 +119,45 @@ h2{
     width: 118px;
   }
   
-  .item_buttons > button {
+.item_buttons > button {
     width: 42px;
     height: 42px;
     color: #555555;
     font-size: 14px;
     border-radius: 8px;
-  }
+}
   
-  .item_buttons > button:first-child {
-    background-color: #f5df4d;
-    margin-right: 8px;
-  }
-  
-  .todo_checkbox {
-    appearance: auto !important;
-  }
-  
-  .item input[type='text'] {
-    display: none;
-  }
-  
-  .edit_buttons {
-    display: none;
-  }
-  
+.item_buttons > button:first-child {
+background-color: #f5df4d;
+margin-right: 8px;
+}
+
+.todo_checkbox {
+appearance: auto !important;
+}
+
+.item input[type='text'] {
+display: none;
+}
+
+.edit_buttons {
+display: none;
+}
+
+.pagination{
+    position: absolute;
+    left : 50%;
+    bottom : 13px;
+    transform: translateX(-50%);
+    display : flex;
+}
+
+.pagination button{
+    width: 50px;
+    height: 30px;
+    background-color: #939597;
+    color : #fff;
+    margin: 0 2px;
+    font-weight: 700;
+    border-radius: 6px;
+}

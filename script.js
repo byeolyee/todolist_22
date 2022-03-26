@@ -1,11 +1,67 @@
 const get = (target) => {
-    return document.querySelector(target)
+    return document.querySelector(target);
+}
+
+const getAll = (target) => {
+    return document.querySelectorAll(target);
 }
 
 const API_URL = `http://localhost:3000/todos`;
 const $todos = get('.todos');
 const $todoInput = get('.todo_input');
+const $pagination = get('.pagination');
 const $form = get('.todo_form');
+
+let currentPage = 1;
+const limit = 5;
+const pageCount = 5;
+const totalCount = 53;
+
+const pagination = () => {
+    let totalPage = Math.ceil(totalCount / limit);
+    let pageGroup = Math.ceil(currentPage / pageCount);
+    //?????pageGroup??????
+    let lastNumber = pageGroup * pageCount;
+    if (lastNumber > totalPage) {
+        lastNumber = totalPage;
+    }
+    let firstNumber = lastNumber - (pageCount - 1);
+
+    const next = lastNumber + 1;
+    const prev = firstNumber - 1;
+
+    let html = '';
+
+    if (prev > 0) {
+        html += "<button class='prev'data-fn='prev'>이전</button>";
+    }
+
+    for (let i = firstNumber; i <= lastNumber; i++) {
+        html += `<button class='pageNumber' id="page_${i}">${i}</button>`;
+    }
+    if (lastNumber < totalPage) {
+        html += `<button class='next' data-fn='next'>다음</button>`;
+    }
+
+    $pagination.innerHTML = html;
+    const $currentPageNumber = get(`.pageNumber#page_${currentPage}`);
+    $currentPageNumber.style.background = "#f5df4d";
+
+    const $currentPageNumbers = getAll(`.pagination button`);
+    $currentPageNumbers.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (btn.dataset.fn === 'prev') {
+                currentPage = prev;
+            } else if (btn.dataset.fn === 'next') {
+                currentPage = next;
+            } else {
+                currentPage = btn.innerText;
+            }
+            pagination();
+            getTodos();
+        })
+    })
+}
 
 const createItems = (item) => {
     const { id, content, completed } = item;
@@ -40,16 +96,8 @@ const createItems = (item) => {
 
 }
 
-const renderAllTodos = (todos) => {
-    $todos.innerHTML = '';
-    todos.forEach((item) => {
-        const todoElement = createItems(item);
-        $todos.appendChild(todoElement);
-    })
-}
-
 const getTodos = () => {
-    fetch(API_URL)
+    fetch(`${API_URL}?_page=${currentPage}&_limit=${limit}`)
         .then((response) => response.json())
         .then((todos) => {
             renderAllTodos(todos);
@@ -151,9 +199,19 @@ const removeTodo = (e) => {
         .catch((error) => console.error(error));
 }
 
+
+const renderAllTodos = (todos) => {
+    $todos.innerHTML = '';
+    todos.forEach((item) => {
+        const todoElement = createItems(item);
+        $todos.appendChild(todoElement);
+    })
+}
+
 const init = () => {
     window.addEventListener('DOMContentLoaded', () => {
         getTodos();
+        pagination();
     })
     $form.addEventListener('submit', addTodo);
     $todos.addEventListener('click', toggleTodo);
