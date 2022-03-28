@@ -9,6 +9,8 @@ const getAll = (target) => {
 const API_URL = `http://localhost:3000/todos`;
 const $todos = get('.todos');
 const $todoInput = get('.todo_input');
+const $todoAddSubmit = get('.todo_submit_button');
+const $todoDeletSubmit = get('.todo_sel_delete_button');
 const $pagination = get('.pagination');
 const $form = get('.todo_form');
 
@@ -20,7 +22,6 @@ const totalCount = 53;
 const pagination = () => {
     let totalPage = Math.ceil(totalCount / limit);
     let pageGroup = Math.ceil(currentPage / pageCount);
-    //?????pageGroup??????
     let lastNumber = pageGroup * pageCount;
     if (lastNumber > totalPage) {
         lastNumber = totalPage;
@@ -199,7 +200,6 @@ const removeTodo = (e) => {
         .catch((error) => console.error(error));
 }
 
-
 const renderAllTodos = (todos) => {
     $todos.innerHTML = '';
     todos.forEach((item) => {
@@ -213,7 +213,9 @@ const init = () => {
         getTodos();
         pagination();
     })
-    $form.addEventListener('submit', addTodo);
+
+    $todoAddSubmit.addEventListener('click', addTodo);
+    // $form.addEventListener('submit', addTodo);
     $todos.addEventListener('click', toggleTodo);
     $todos.addEventListener('click', changeEditMode);
     $todos.addEventListener('click', editTodo);
